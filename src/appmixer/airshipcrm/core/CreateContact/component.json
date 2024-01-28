@@ -1,0 +1,103 @@
+{
+    "name": "appmixer.airshipcrm.core.CreateContact",
+    "author": "Harsha Surisetty <harsha@client.io>",
+    "icon": "data:image/jpeg;base64,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",
+    "description": "Create a contact.",
+    "auth": {
+        "service": "appmixer:airshipcrm"
+    },
+    "private": false,
+    "inPorts": [
+        {
+            "name": "in",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "accountId": {
+                        "type": "string"
+                    },
+                    "firstName": {
+                        "type": "string"
+                    },
+                    "lastName": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "mobileNumber": {
+                        "type": "string"
+                    },
+                    "gender": {
+                        "type": "string"
+                    },
+                    "dob": {
+                        "type": "string"
+                    }
+
+                },
+                "required": [
+                    "accountId"
+                ]
+            },
+            "inspector": {
+                "inputs": {
+                    "accountId": {
+                        "type": "text",
+                        "index": 0,
+                        "label": "Account Id",
+                        "tooltip": "Account Id."
+                    },
+                    "firstName": {
+                        "type": "text",
+                        "index": 1,
+                        "label": "First Name",
+                        "tooltip": "First Name."
+                    },
+                    "lastName": {
+                        "type": "text",
+                        "index": 2,
+                        "label": "Last Name",
+                        "tooltip": "Last Name."
+                    },
+                    "email": {
+                        "type": "text",
+                        "index": 3,
+                        "label": "Email",
+                        "tooltip": "Email."
+                    },
+                    "mobileNumber": {
+                        "type": "text",
+                        "index": 4,
+                        "label": "Mobile Number",
+                        "tooltip": "Mobile Number."
+                    },
+                    "gender": {
+                        "type": "text",
+                        "index": 5,
+                        "label": "Gender",
+                        "tooltip": "Gender."
+                    },
+                    "dob": {
+                        "type": "text",
+                        "index": 6,
+                        "label": "Date of Birth",
+                        "tooltip": "Date of Birth."
+                    }
+                }
+            }
+        }
+    ],
+    "outPorts": [
+        {
+            "name": "out",
+            "options": [
+                {
+                    "label": "Result",
+                    "value": "result"
+                }
+            ]
+        }
+    ]
+}
+
