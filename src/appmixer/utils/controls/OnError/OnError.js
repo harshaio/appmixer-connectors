@@ -12,32 +12,24 @@ async function fetchErrorsPage(context, lock, limit, logId = null, lastGridTimes
         qs.searchAfter = [logId, lastGridTimestamp];
     }
 
-    while (true) {
-        try {
-            const result = await context.callAppmixer({
-                endPoint: '/logs',
-                method: 'GET',
-                qs
-            });
+    try {
+        const result = await context.callAppmixer({
+            endPoint: '/logs',
+            method: 'GET',
+            qs
+        });
 
-            if (!(result.hits && result.hits.length > 0 && limit > result.hits.length)) {
-                break;
-            }
-
+        if (result.hits && result.hits.length > 0 && limit > result.hits.length) {
             lock.extend(parseInt(context.config.lockTTL, 10) || 1000 * 60 * 2);
             const lastLog = result.hits[result.hits.length - 1];
             errors.push(...result.hits);
 
-            if (errors.length >= limit) {
-                break;
+            if (errors.length < limit) {
+                return fetchErrorsPage(context, lock, limit, lastLog['_id'], lastLog['gridTimestamp'], size, errors);
             }
-
-            qs.searchAfter = [lastLog['_id'], lastLog['gridTimestamp']];
-        } catch (error) {
-            console.error('Error fetching errors:', error);
-            await context.log({ level: 'error', error: error.message || error });
-            break;
         }
+    } catch (error) {
+        await context.log({ level: 'error', error: error.message || error });
     }
 
     return errors;
@@ -54,11 +46,11 @@ function addLabels(context, errors) {
 }
 
 module.exports = {
-
     async tick(context) {
 
         const lockName = `errorProcessingLock-${context.componentId}`; // Define a unique lock name
         let lock;
+
         try {
             lock = await context.lock(lockName, { ttl: context.config.lockTTL || 1000 * 60 * 5, maxRetryCount: 0 });
             const { lastLogId, gridTimestamp } = context.state;
@@ -72,7 +64,7 @@ module.exports = {
 
             const result = await fetchErrorsPage(context, lock, limit, lastLogId, gridTimestamp);
 
-            if (result?.length > 0) {
+            if (result.length > 0) {
                 // Process and send the errors to outport
                 const labeledErrors = addLabels(context, result);
                 await context.sendArray(labeledErrors, 'out');
@@ -82,8 +74,6 @@ module.exports = {
                 const newGridTimestamp = result[result.length - 1]['gridTimestamp'];
                 return context.saveState({ lastLogId: newLastLogId, gridTimestamp: newGridTimestamp });
             }
-        } catch (error) {
-            await context.log({ level: 'error', message: error.message || error });
         } finally {
             if (lock) {
                 // Release the lock when done
